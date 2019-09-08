@@ -3,6 +3,7 @@ const fs = require('fs');
 
 http.createServer(function (req, res) {
     const url = req.url;
+    const method = req.method;
     if(url === '/') {
         res.write('<html>');
         res.write('<head><title>Hi from my server</title></head>');
@@ -10,13 +11,21 @@ http.createServer(function (req, res) {
         res.write('</html>');
         return res.end();
     }
-    if (url === '/message') {
-        fs.writeFile('message.txt', 'One file is here', function (err) {
-            if (err) throw err;
-            console.log('file is created');
-        })
-
-    }
+    if (url === '/message' && method === 'POST') {
+        const body = [];
+        req.on('data', (chunk) => {
+            console.log(chunk);
+            body.push(chunk)
+        });
+        req.on('end', () => {
+           const parsedBody = Buffer.concat(body).toJSON();
+           console.log(parsedBody);
+        });
+        fs.writeFileSync('new.txt', 'Dummy');
+        res.statusCode = 302;
+        res.setHeader('Location', '/');
+        return res.end();
+        }
     res.setHeader('Content-Type', 'text/html');
     res.write('<html>');
     res.write('<head><title>Hi from my server</title></head>');
