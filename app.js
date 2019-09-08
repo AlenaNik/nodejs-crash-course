@@ -18,10 +18,10 @@ http.createServer(function (req, res) {
             body.push(chunk)
         });
         req.on('end', () => {
-           const parsedBody = Buffer.concat(body).toJSON();
-           console.log(parsedBody);
+           const parsedBody = Buffer.concat(body).toString();
+           const message = parsedBody.split('=')[1];
+            fs.writeFileSync('new.txt', message);
         });
-        fs.writeFileSync('new.txt', 'Dummy');
         res.statusCode = 302;
         res.setHeader('Location', '/');
         return res.end();
