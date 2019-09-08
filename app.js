@@ -1,6 +1,11 @@
-const http = require('http');
-const routes = require('./routes');
+const express = require('express');
 
-const server = http.createServer(routes);
+const app = express();
 
-server.listen(8080);
+
+app.use('/new', (req, res) => {
+    res.send('<h1>Hello from express!</h1>');
+});
+
+
+app.listen(3000);
