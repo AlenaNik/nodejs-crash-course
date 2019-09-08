@@ -1,17 +1,20 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
+app.use(bodyParser.urlencoded({extended: false}));
 
-app.use('/users', (req, res, next) => {
-    console.log('Slash users');
-    res.send('<h1>Dummy text users</h1>');
+app.use('/add-product', (req, res, next) => {
+    res.send('<html><form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add products</button></form></html>');
 });
+
+app.use('/product', (req, res, next) => {
+        console.log(req.body);
+        res.redirect('/');
+})
 
 app.use('/', (req, res, next) => {
-    console.log('Just slash');
     res.send('<h1>Nothing here</h1>');
 });
-
-
 
 app.listen(3000);
